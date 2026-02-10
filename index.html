@@ -155,18 +155,39 @@
         ];
 
         function startSurprise() {
-            const name = document.getElementById('userName').value;
-            if (!name) return alert("Please enter a name!");
+    const name = document.getElementById('userName').value;
+    const formspreeID = "https://formspree.io/f/mvzbgenq"; // <--- PASTE YOUR ID HERE
 
-            // Play music (will only work if browser allows)
-            document.getElementById('bgMusic').play().catch(() => console.log("Music blocked by browser policy"));
+    if (!name) return alert("Please enter a name!");
 
-            document.getElementById('page1').classList.add('hidden');
-            document.getElementById('page2').classList.remove('hidden');
-            document.getElementById('welcomeHeader').innerText = `Happy Teddy Day, ${name}!`;
+    // --- FORMSPREE TRACKER START ---
+    fetch(`https://formspree.io/f/mvzbgenq`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            visitor_name: name,
+            message: `${name} has just opened their Teddy Day surprise!`,
+            date: new Date().toLocaleString()
+        })
+    }).then(response => {
+        console.log("Tracker sent!");
+    }).catch(error => {
+        console.log("Tracking failed (likely an ad-blocker).");
+    });
+    // --- FORMSPREE TRACKER END ---
 
-            displayNotes();
+    // Continue with the website animations
+    document.getElementById('bgMusic').play().catch(() => console.log("Music blocked"));
+    document.getElementById('page1').classList.add('hidden');
+    document.getElementById('page2').classList.remove('hidden');
+    document.getElementById('welcomeHeader').innerText = `Happy Teddy Day, ${name}!`;
+
+    displayNotes();
         }
+        
 
         function displayNotes() {
             const container = document.getElementById('notesContainer');
