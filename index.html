@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Teddy Day! 🧸</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe4e1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: #5d4037;
+        }
+
+        #app-container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            transition: all 0.5s ease;
+        }
+
+        .hidden { display: none; }
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #ffb7b2;
+            margin-bottom: 20px;
+            width: 80%;
+            outline: none;
+        }
+
+        button {
+            background-color: #ffb7b2;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #ff8b94; }
+
+        .gif-container img {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .note {
+            font-style: italic;
+            margin: 15px 0;
+            animation: fadeIn 2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: -10px;
+            font-size: 20px;
+            user-select: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <div id="page1">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIwdW14N2VxdzZueXN6ZzF4M3BqZzZ4eXN6ZzF4M3BqZzZ4JnB0PU1mcmFtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHFmEOfXYpBvD/giphy.gif" alt="Cute Bear">
+            </div>
+            <h2>Who are we celebrating today?</h2>
+            <input type="text" id="userName" placeholder="Enter name...">
+            <br>
+            <button onclick="showSurprise()">Unlock Surprise</button>
+        </div>
+
+        <div id="page2" class="hidden">
+            <h1 id="greeting"></h1>
+            <div id="notes-area">
+                <p class="note">✨ Soft on the outside, strong on the inside.</p>
+                <p class="note">✨ Always there for a warm hug.</p>
+                <p class="note">✨ The cutest presence in my life.</p>
+            </div>
+            <hr>
+            <h2 style="color: #d32f2f;">The Fact:</h2>
+            <p id="finalMessage" style="font-size: 1.2rem; font-weight: bold;"></p>
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y1bGNmZzZ4eXN6ZzF4M3BqZzZ4eXN6ZzF4M3BqZzZ4JnB0PU1mcmFtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Vp8YmJIKW2s7Oms9hH/giphy.gif" alt="Teddy Hug">
+            </div>
+            <button onclick="restart()">Send Another Hug</button>
+        </div>
+    </div>
+
+    <script>
+        function showSurprise() {
+            const name = document.getElementById('userName').value;
+            if (name.trim() === "") {
+                alert("Please enter a name first!");
+                return;
+            }
+
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+            
+            document.getElementById('greeting').innerText = `Happy Teddy Day, ${name}!`;
+            document.getElementById('finalMessage').innerText = `I looked through all the shops, but it turns out YOU are the best Teddy Bear in the world! 🧸❤️`;
+            
+            createHearts();
+        }
+
+        function restart() {
+            location.reload();
+        }
+
+        // Background heart animation
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-hearts';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(heart);
+
+                const anim = heart.animate([
+                    { transform: 'translateY(0vh) rotate(0deg)', opacity: 1 },
+                    { transform: 'translateY(110vh) rotate(360deg)', opacity: 0 }
+                ], {
+                    duration: 3000,
+                    easing: 'linear'
+                });
+
+                anim.onfinish = () => heart.remove();
+            }, 300);
+        }
+    </script>
+</body>
+</html>
 
