@@ -3,78 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Teddy Day! 🧸</title>
+    <title>Teddy Day Surprise! 🧸</title>
     <style>
+        :root {
+            --primary-pink: #ffb7b2;
+            --dark-pink: #ff8b94;
+            --bear-brown: #8d6e63;
+        }
+
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffe4e1;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: #fff0f3;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            color: #5d4037;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #4a4a4a;
         }
 
         #app-container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 400px;
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 183, 178, 0.4);
+            max-width: 450px;
             width: 90%;
-            transition: all 0.5s ease;
+            position: relative;
+            z-index: 10;
         }
 
         .hidden { display: none; }
 
-        input {
-            padding: 10px;
-            border-radius: 10px;
-            border: 2px solid #ffb7b2;
+        /* Animations */
+        .bounce { animation: bounce 2s infinite; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Elements */
+        .gif-display {
+            width: 180px;
+            height: 180px;
             margin-bottom: 20px;
+            border-radius: 20px;
+        }
+
+        input {
+            padding: 12px;
+            border-radius: 25px;
+            border: 2px solid var(--primary-pink);
             width: 80%;
+            margin-bottom: 15px;
+            text-align: center;
             outline: none;
         }
 
         button {
-            background-color: #ffb7b2;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            background: var(--primary-pink);
             color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 10px;
         }
 
-        button:hover { background-color: #ff8b94; }
+        button:hover { background: var(--dark-pink); transform: scale(1.05); }
 
-        .gif-container img {
-            width: 150px;
-            margin-bottom: 20px;
+        .note-card {
+            background: #fff9fa;
+            border-left: 5px solid var(--primary-pink);
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 0.95rem;
+            text-align: left;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: 0.5s;
         }
 
-        .note {
-            font-style: italic;
-            margin: 15px 0;
-            animation: fadeIn 2s;
-        }
+        .note-card.show { opacity: 1; transform: translateX(0); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .floating-hearts {
+        .floating-heart {
             position: fixed;
-            top: -10px;
-            font-size: 20px;
-            user-select: none;
-            z-index: -1;
+            pointer-events: none;
+            z-index: 1;
+            animation: rise 3s linear forwards;
+        }
+
+        @keyframes rise {
+            to { transform: translateY(-100vh) translateX(50px); opacity: 0; }
         }
     </style>
 </head>
@@ -82,73 +116,101 @@
 
     <div id="app-container">
         <div id="page1">
-            <div class="gif-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIwdW14N2VxdzZueXN6ZzF4M3BqZzZ4eXN6ZzF4M3BqZzZ4JnB0PU1mcmFtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHFmEOfXYpBvD/giphy.gif" alt="Cute Bear">
-            </div>
-            <h2>Who are we celebrating today?</h2>
-            <input type="text" id="userName" placeholder="Enter name...">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIwdW14N2VxdzZueXN6ZzF4M3BqZzZ4eXN6ZzF4M3BqZzZ4JnB0PU1mcmFtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L4lvBpHFmEOfXYpBvD/giphy.gif" class="gif-display bounce" alt="Teddy">
+            <h2>🧸 Teddy Day Entry 🧸</h2>
+            <p>Enter your name to unlock the fluffiness!</p>
+            <input type="text" id="userName" placeholder="Your Name Here...">
             <br>
-            <button onclick="showSurprise()">Unlock Surprise</button>
+            <button onclick="startSurprise()">Open Surprise ✨</button>
         </div>
 
         <div id="page2" class="hidden">
-            <h1 id="greeting"></h1>
-            <div id="notes-area">
-                <p class="note">✨ Soft on the outside, strong on the inside.</p>
-                <p class="note">✨ Always there for a warm hug.</p>
-                <p class="note">✨ The cutest presence in my life.</p>
+            <h2 id="welcomeHeader"></h2>
+            
+            <img id="mainTeddy" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y1bGNmZzZ4eXN6ZzF4M3BqZzZ4eXN6ZzF4M3BqZzZ4JnB0PU1mcmFtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Vp8YmJIKW2s7Oms9hH/giphy.gif" class="gif-display" alt="Teddy">
+            
+            <div id="notesContainer">
+                </div>
+
+            <div id="finalMessage" class="hidden">
+                <h3 style="color: #d32f2f;">Plot Twist!</h3>
+                <p>I looked everywhere for the softest, cutest, and most huggable teddy bear... and I realized it's <strong>YOU!</strong></p>
+                <p>Happy Teddy Day, you little bear! 🧸❤️</p>
+                <button onclick="squeezeTeddy()">Squeeze the Teddy! 🤗</button>
             </div>
-            <hr>
-            <h2 style="color: #d32f2f;">The Fact:</h2>
-            <p id="finalMessage" style="font-size: 1.2rem; font-weight: bold;"></p>
-            <div class="gif-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y1bGNmZzZ4eXN6ZzF4M3BqZzZ4eXN6ZzF4M3BqZzZ4JnB0PU1mcmFtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Vp8YmJIKW2s7Oms9hH/giphy.gif" alt="Teddy Hug">
-            </div>
-            <button onclick="restart()">Send Another Hug</button>
         </div>
     </div>
 
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        function showSurprise() {
+        const notes = [
+            "🌸 Just like a teddy, you bring comfort to my soul.",
+            "🍯 You're sweeter than a jar of honey!",
+            "☁️ Your hugs feel like floating on a soft cloud.",
+            "⭐ You are the 'un-bear-ably' cute one in this relationship.",
+            "🩹 You're the best healer for a bad day."
+        ];
+
+        function startSurprise() {
             const name = document.getElementById('userName').value;
-            if (name.trim() === "") {
-                alert("Please enter a name first!");
-                return;
-            }
+            if (!name) return alert("Please enter a name!");
+
+            // Play music (will only work if browser allows)
+            document.getElementById('bgMusic').play().catch(() => console.log("Music blocked by browser policy"));
 
             document.getElementById('page1').classList.add('hidden');
             document.getElementById('page2').classList.remove('hidden');
-            
-            document.getElementById('greeting').innerText = `Happy Teddy Day, ${name}!`;
-            document.getElementById('finalMessage').innerText = `I looked through all the shops, but it turns out YOU are the best Teddy Bear in the world! 🧸❤️`;
-            
-            createHearts();
+            document.getElementById('welcomeHeader').innerText = `Happy Teddy Day, ${name}!`;
+
+            displayNotes();
         }
 
-        function restart() {
-            location.reload();
+        function displayNotes() {
+            const container = document.getElementById('notesContainer');
+            notes.forEach((note, index) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'note-card';
+                    div.innerText = note;
+                    container.appendChild(div);
+                    setTimeout(() => div.classList.add('show'), 100);
+                    
+                    // If it's the last note, show the final message
+                    if (index === notes.length - 1) {
+                        setTimeout(() => {
+                            document.getElementById('finalMessage').classList.remove('hidden');
+                            startHearts();
+                        }, 1000);
+                    }
+                }, index * 1500); // 1.5 second delay between notes
+            });
         }
 
-        // Background heart animation
-        function createHearts() {
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'floating-hearts';
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                document.body.appendChild(heart);
+        function squeezeTeddy() {
+            const teddy = document.getElementById('mainTeddy');
+            teddy.classList.add('shake');
+            setTimeout(() => teddy.classList.remove('shake'), 500);
+            
+            // Spawn extra hearts on squeeze
+            for(let i=0; i<5; i++) createHeart();
+        }
 
-                const anim = heart.animate([
-                    { transform: 'translateY(0vh) rotate(0deg)', opacity: 1 },
-                    { transform: 'translateY(110vh) rotate(360deg)', opacity: 0 }
-                ], {
-                    duration: 3000,
-                    easing: 'linear'
-                });
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = ['❤️', '🧸', '💖', '✨'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
 
-                anim.onfinish = () => heart.remove();
-            }, 300);
+        function startHearts() {
+            setInterval(createHeart, 400);
         }
     </script>
 </body>
